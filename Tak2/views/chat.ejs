@@ -12,7 +12,7 @@
       background-image: url('https://media.istockphoto.com/id/1156309024/vector/green-speech-and-thought-bubbles-with-quote-marks.jpg?s=612x612&w=0&k=20&c=LVRJRXHYKC2C30I4jKaLbXJZTKqKBZLSgEiot9An190=');
       background-position: center;
       background-repeat: no-repeat;
-      background-size:860px 850px;
+      background-size:cover;
     }
 
     .container {
@@ -20,11 +20,10 @@
       justify-content: center;
       align-items: center;
       padding-left: 100px;
-      height: 80vh;
-      width: 70%;
+      height: 88vh;
+      width: 80%;
       margin-top: 70px;
     }
-
     .search-input {
       margin-bottom: 10px;
       padding: 15px;
@@ -171,6 +170,23 @@
       font-weight: bold;
       cursor: pointer;
     }
+    .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      color: white;
+    }
+    .back-button:hover {
+      background-color: #2e7030;
+    } 
 
     .logout-button {
       position: absolute;
@@ -217,10 +233,8 @@
       }
     }
   </style>
-  </style>
 </head>
 <body>
-  
   <div class="container">
     <div class="user-list">
       <h2 style="background-color: #4caf50; color: white; padding: 10px; margin-top: 0; border-top-left-radius: 10px; border-top-right-radius: 10px;">User List</h2>
@@ -239,7 +253,7 @@
       </div>
     </div>
   </div>
-
+  <button id="backButton" class="back-button" onclick="history.back()">Back</button>
   <button id="logoutButton" class="logout-button">Logout</button>
 
   <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
@@ -248,7 +262,7 @@
       var selectedUser = null;
       var loggedInUser = '<%= username %>';
       var chatMessagesDiv = $('#chatMessages');
-
+      
       function startChatting() {
         if (selectedUser) {
           $.ajax({
@@ -313,16 +327,13 @@
     success: function (response) {
       var messages = response.messages;
       displayChatMessages(messages);
-      setTimeout(scrollToBottom, 100); // Delay scrolling to the bottom for 100 milliseconds
+      setTimeout(scrollToBottom, 100);  
     },
     error: function (error) {
       console.log(error);
     }
   });
 }
-
-
-
       function displayChatMessages(messages) {
         chatMessagesDiv.empty();
 
@@ -409,6 +420,7 @@
       function scrollToBottom() {
         chatMessagesDiv.scrollTop(chatMessagesDiv[0].scrollHeight);
       } 
+       
       fetchUsers();
     });
   </script>
