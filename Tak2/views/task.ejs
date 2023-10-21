@@ -98,6 +98,24 @@
   h2{
     color:darkgreen;
   }
+  .back-button {
+      position: absolute;
+      top: 20px;
+      left: 20px;
+      padding: 10px;
+      background-color: #4caf50;
+      border: none;
+      border-radius: 5px;
+      box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      cursor: pointer;
+      transition: background-color 0.3s;
+      font-size: 16px;
+      color: white;
+    }
+
+    .back-button:hover {
+      background-color: #2e7030;
+    }
   .logout-button {
     padding: 10px;
     background-color: #4caf50;
@@ -139,6 +157,7 @@
 </head>
 <body>
   <body>
+    <button id="backButton" class="back-button" onclick="history.back()">Back</button>
     <h1>Task Management</h1>
     <h2>Welcome, <%= username %></h2>
     <h3>Create a New Task</h3>
@@ -189,11 +208,11 @@
               <td><%= task.status %></td>
               <% if (username && username === task.receiver.username && task.status === 'assigned') { %>
                 <td>
-                  <form action="/accept-task" method="POST">
+                  <form   name="acceptTaskForm" data-taskid="<%= task._id %>"  >
                     <input type="hidden" name="taskId" value="<%= task._id %>">
                     <input type="submit" value="Accept">
                   </form>
-                  <form action="/reject-task" method="POST">
+                  <form   name="rejectTaskForm" data-taskid="<%= task._id %>" >
                     <input type="hidden" name="taskId" value="<%= task._id %>">
                     <input type="submit" value="Reject">
                   </form>
@@ -202,8 +221,10 @@
                 <td>
                   <button disabled>Accepted</button>
                 </td>
-              <% } else if (username && username === task.receiver.username) { %>
-                <td></td>
+              <% }  else if (username && username === task.receiver.username && task.status === 'rejected') { %>
+                <td>
+                  <button disabled>Rejected</button>
+                </td>
               <% } %>
             </tr>
           <% }) %>
@@ -254,7 +275,7 @@
             success: function(response) {
               socket.emit('task-rejected', taskId);
               form.closest('tr').find('td:last-child').text('Rejected');
-              form.closest('tr').remove();  
+              form.remove();  
             }
           });
         });
